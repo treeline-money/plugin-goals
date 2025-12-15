@@ -1307,8 +1307,7 @@
     width: 80px;
   }
 
-  .form-label input,
-  .form-label select {
+  .form-label input {
     padding: 8px;
     background: var(--bg-primary);
     border: 1px solid var(--border-primary);
@@ -1317,8 +1316,7 @@
     font-size: 14px;
   }
 
-  .form-label input:focus,
-  .form-label select:focus {
+  .form-label input:focus {
     outline: none;
     border-color: var(--accent-primary);
   }
@@ -1381,36 +1379,60 @@
     margin-bottom: 0;
   }
 
-  .allocation-account {
-    flex: 1;
-    padding: 6px 8px;
+  .allocation-account,
+  .allocation-type {
+    padding: 8px;
     background: var(--bg-primary);
     border: 1px solid var(--border-primary);
     border-radius: 4px;
     color: var(--text-primary);
     font-size: 13px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    cursor: pointer;
+  }
+
+  .allocation-account {
+    flex: 1;
+    padding-right: 28px;
   }
 
   .allocation-type {
-    width: 50px;
-    padding: 6px 4px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-primary);
-    border-radius: 4px;
+    width: 65px;
+    padding-right: 24px;
+    background-position: right 6px center;
+  }
+
+  .allocation-account:focus,
+  .allocation-type:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+  }
+
+  .allocation-account option,
+  .allocation-type option {
+    background: var(--bg-secondary);
     color: var(--text-primary);
-    font-size: 13px;
-    text-align: center;
+    padding: 8px;
   }
 
   .allocation-value {
-    width: 80px;
-    padding: 6px 8px;
+    width: 90px;
+    padding: 8px;
     background: var(--bg-primary);
     border: 1px solid var(--border-primary);
     border-radius: 4px;
     color: var(--text-primary);
     font-size: 13px;
     font-family: var(--font-mono);
+  }
+
+  .allocation-value:focus {
+    outline: none;
+    border-color: var(--accent-primary);
   }
 
   .btn-icon.danger:hover {
