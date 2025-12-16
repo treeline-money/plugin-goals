@@ -31,6 +31,7 @@
   let newGoalName = $state("");
   let newGoalTargetAmount = $state(0);
   let newGoalTargetDate = $state<string | null>(null);
+  let newGoalStartAmount = $state<number | null>(null);
   let newGoalIcon = $state("🎯");
   let newGoalColor = $state("#3b82f6");
   let newGoalAllocations = $state<FormAllocation[]>([]);
@@ -197,18 +198,8 @@
       ? JSON.stringify(newGoalAllocations)
       : null;
 
-    // Calculate starting balance from allocations
-    let startingBalance = 0;
-    for (const alloc of newGoalAllocations) {
-      const account = accounts.find((a) => a.account_id === alloc.account_id);
-      if (account) {
-        if (alloc.allocation_type === "percentage") {
-          startingBalance += (account.balance * alloc.allocation_value) / 100;
-        } else {
-          startingBalance += Math.min(alloc.allocation_value, account.balance);
-        }
-      }
-    }
+    // Use user-specified start amount, or default to 0 if not set
+    const startingBalance = newGoalStartAmount ?? 0;
 
     await sdk.execute(`
       INSERT INTO sys_plugin_goals
@@ -243,6 +234,7 @@
         target_amount = ${goal.target_amount},
         target_date = ${goal.target_date ? `'${goal.target_date}'` : "NULL"},
         allocations = ${allocationsJson ? `'${escapeSql(allocationsJson)}'` : "NULL"},
+        starting_balance = ${goal.starting_balance},
         icon = '${goal.icon}',
         color = '${goal.color}',
         updated_at = CURRENT_TIMESTAMP
@@ -288,6 +280,7 @@
     newGoalName = "";
     newGoalTargetAmount = 0;
     newGoalTargetDate = null;
+    newGoalStartAmount = null;
     newGoalIcon = "🎯";
     newGoalColor = "#3b82f6";
     newGoalAllocations = [];
@@ -427,12 +420,6 @@
 
   let activeGoals = $derived(goals.filter((g) => !g.completed));
   let completedGoals = $derived(goals.filter((g) => g.completed));
-  let totalSaved = $derived(
-    activeGoals.reduce((sum, g) => sum + (getCurrentAmount(g) - g.starting_balance), 0)
-  );
-  let totalTarget = $derived(
-    activeGoals.reduce((sum, g) => sum + (g.target_amount - g.starting_balance), 0)
-  );
 
   // ============================================================================
   // Lifecycle
@@ -469,24 +456,6 @@
       <button class="btn primary" onclick={() => initialize()}>Retry</button>
     </div>
   {:else}
-    <!-- Summary -->
-    {#if activeGoals.length > 0}
-      <div class="summary">
-        <div class="summary-item">
-          <span class="summary-label">Total Progress</span>
-          <span class="summary-value">
-            {formatCurrency(totalSaved)} / {formatCurrency(totalTarget)}
-          </span>
-        </div>
-        <div class="summary-bar">
-          <div
-            class="summary-fill"
-            style="width: {totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0}%"
-          ></div>
-        </div>
-      </div>
-    {/if}
-
     <!-- Goals Grid -->
     <div class="content">
       {#if activeGoals.length === 0 && completedGoals.length === 0}
@@ -705,6 +674,18 @@
           </label>
 
           <label class="form-label">
+            Starting Amount (optional)
+            <input
+              type="number"
+              bind:value={newGoalStartAmount}
+              step="100"
+              min="0"
+              placeholder="0"
+            />
+            <span class="form-hint">Progress is calculated from this starting point. Leave at 0 to count all current savings as progress.</span>
+          </label>
+
+          <label class="form-label">
             Target Date (optional)
             <input type="date" bind:value={newGoalTargetDate} />
           </label>
@@ -807,6 +788,17 @@
               step="100"
               min="0"
             />
+          </label>
+
+          <label class="form-label">
+            Starting Amount
+            <input
+              type="number"
+              bind:value={editingGoal.starting_balance}
+              step="100"
+              min="0"
+            />
+            <span class="form-hint">Progress is calculated from this starting point. Set to 0 to count all current savings as progress.</span>
           </label>
 
           <label class="form-label">
@@ -922,44 +914,6 @@
     to {
       transform: rotate(360deg);
     }
-  }
-
-  .summary {
-    padding: var(--spacing-md) var(--spacing-lg);
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-primary);
-  }
-
-  .summary-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-sm);
-  }
-
-  .summary-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-  }
-
-  .summary-value {
-    font-size: 14px;
-    font-weight: 600;
-    font-family: var(--font-mono);
-  }
-
-  .summary-bar {
-    height: 6px;
-    background: var(--bg-tertiary);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .summary-fill {
-    height: 100%;
-    background: var(--accent-primary);
-    border-radius: 3px;
-    transition: width 0.3s ease;
   }
 
   .content {
@@ -1330,10 +1284,6 @@
     height: 38px;
     padding: 4px !important;
     cursor: pointer;
-  }
-
-  .account-select {
-    min-height: 100px;
   }
 
   .form-hint {
