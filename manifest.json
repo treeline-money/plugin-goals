@@ -1,13 +1,15 @@
 {
   "id": "goals",
   "name": "Savings Goals",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Track savings goals like emergency funds, house down payments, and more",
   "author": "Treeline",
   "main": "index.js",
   "permissions": {
     "tables": {
-      "write": ["sys_plugin_goals"]
+      "write": [
+        "sys_plugin_goals"
+      ]
     }
   }
 }
