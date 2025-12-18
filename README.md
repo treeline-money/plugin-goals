@@ -1,13 +1,25 @@
 # Savings Goals
 
-A [Treeline](https://github.com/zack-schrag/treeline-money) plugin for tracking savings goals.
+A [Treeline](https://github.com/zack-schrag/treeline-money) plugin for tracking savings goals with account allocations.
 
-Track progress toward financial goals like:
-- Emergency fund
-- House down payment
-- Vacation fund
-- New car
-- Any custom goal
+## Features
+
+- **Multiple goals**: Track any number of financial goals simultaneously
+- **Account allocations**: Link goals to accounts with percentage or fixed dollar allocations
+- **Progress tracking**: Visual progress bars and "on track" status for goals with deadlines
+- **Preset templates**: Quick-start common goals (emergency fund, house, vacation, car, wedding, education)
+- **Custom styling**: Set icons and colors for each goal
+- **Target dates**: Optional deadlines with "monthly needed" calculations
+- **Completion tracking**: Mark goals complete and view archived goals
+
+## How It Works
+
+1. **Create a goal**: Set name, target amount, and optional target date
+2. **Link accounts**: Allocate percentages or fixed amounts from your accounts
+3. **Track progress**: Balance is calculated automatically from linked accounts
+4. **Complete**: Mark as complete when reached, or reopen if needed
+
+Goals without linked accounts are tracked manually using the starting balance.
 
 ## Installation
 
