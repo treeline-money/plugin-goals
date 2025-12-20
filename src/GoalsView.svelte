@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { PluginSDK, Goal, Account, AccountAllocation } from "./types";
+  import type { PluginSDK } from "@treeline-money/plugin-sdk";
+  import type { Goal, Account, AccountAllocation } from "./types";
 
   // Props from plugin SDK
   const { sdk }: { sdk: PluginSDK } = $props();
