@@ -354,10 +354,6 @@
   // Helpers
   // ============================================================================
 
-  function escapeSql(str: string): string {
-    return str.replace(/'/g, "''");
-  }
-
   function formatCurrency(amount: number): string {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
