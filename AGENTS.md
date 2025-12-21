@@ -9,7 +9,7 @@ A Treeline plugin for tracking savings goals like emergency funds, house down pa
 | `manifest.json` | Plugin metadata (id: "goals") |
 | `src/index.ts` | Plugin entry point |
 | `src/GoalsView.svelte` | Main UI component |
-| `src/types.ts` | TypeScript types for the Plugin SDK |
+| `package.json` | Dependencies (includes `@treeline-money/plugin-sdk`) |
 
 ## Quick Commands
 
@@ -36,24 +36,40 @@ CREATE TABLE IF NOT EXISTS sys_plugin_goals (
 )
 ```
 
-## SDK Quick Reference
+## SDK Import
+
+All types are imported from the npm package:
+
+```typescript
+import type { Plugin, PluginContext, PluginSDK } from "@treeline-money/plugin-sdk";
+```
 
 Views receive `sdk` via props:
 
 ```svelte
 <script lang="ts">
-  import type { PluginSDK } from "./types";
-  let { sdk }: { sdk: PluginSDK } = $props();
+  import type { PluginSDK } from "@treeline-money/plugin-sdk";
+
+  interface Props {
+    sdk: PluginSDK;
+  }
+  let { sdk }: Props = $props();
 </script>
 ```
+
+## SDK Quick Reference
 
 | Method | What it does |
 |--------|--------------|
 | `sdk.query(sql)` | Read data |
 | `sdk.execute(sql)` | Write to sys_plugin_goals |
-| `sdk.toast.success/error(msg)` | Show notifications |
+| `sdk.toast.success/error/info(msg)` | Show notifications |
+| `sdk.openView(viewId, props?)` | Navigate to another view |
+| `sdk.onDataRefresh(callback)` | React when data changes |
+| `sdk.emitDataRefresh()` | Notify other views data changed |
 | `sdk.theme.current()` | Get "light" or "dark" |
 | `sdk.settings.get/set()` | Persist settings |
+| `sdk.currency.format(amount)` | Format as currency |
 
 ## Releasing
 
@@ -63,4 +79,4 @@ Views receive `sdk` via props:
 
 ## Full Documentation
 
-See https://github.com/zack-schrag/treeline-money/blob/main/docs/plugins.md
+See https://github.com/treeline-money/treeline
