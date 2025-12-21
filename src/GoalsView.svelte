@@ -205,17 +205,17 @@
     await sdk.execute(`
       INSERT INTO sys_plugin_goals
         (id, name, target_amount, target_date, allocations, starting_balance, icon, color)
-      VALUES (
-        '${id}',
-        '${escapeSql(newGoalName)}',
-        ${newGoalTargetAmount},
-        ${newGoalTargetDate ? `'${newGoalTargetDate}'` : "NULL"},
-        ${allocationsJson ? `'${escapeSql(JSON.stringify(newGoalAllocations))}'` : "NULL"},
-        ${startingBalance},
-        '${newGoalIcon || "🎯"}',
-        '${newGoalColor || "#3b82f6"}'
-      )
-    `);
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      id,
+      newGoalName,
+      newGoalTargetAmount,
+      newGoalTargetDate,
+      allocationsJson ? JSON.stringify(newGoalAllocations) : null,
+      startingBalance,
+      newGoalIcon || "🎯",
+      newGoalColor || "#3b82f6"
+    ]);
 
     sdk.toast.success(`Goal "${newGoalName}" created!`);
     showAddGoal = false;
@@ -231,16 +231,25 @@
 
     await sdk.execute(`
       UPDATE sys_plugin_goals SET
-        name = '${escapeSql(goal.name)}',
-        target_amount = ${goal.target_amount},
-        target_date = ${goal.target_date ? `'${goal.target_date}'` : "NULL"},
-        allocations = ${allocationsJson ? `'${escapeSql(allocationsJson)}'` : "NULL"},
-        starting_balance = ${goal.starting_balance},
-        icon = '${goal.icon}',
-        color = '${goal.color}',
+        name = ?,
+        target_amount = ?,
+        target_date = ?,
+        allocations = ?,
+        starting_balance = ?,
+        icon = ?,
+        color = ?,
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = '${goal.id}'
-    `);
+      WHERE id = ?
+    `, [
+      goal.name,
+      goal.target_amount,
+      goal.target_date,
+      allocationsJson,
+      goal.starting_balance,
+      goal.icon,
+      goal.color,
+      goal.id
+    ]);
 
     sdk.toast.success("Goal updated");
     editingGoal = null;
@@ -249,7 +258,7 @@
   }
 
   async function deleteGoal(id: string) {
-    await sdk.execute(`DELETE FROM sys_plugin_goals WHERE id = '${id}'`);
+    await sdk.execute(`DELETE FROM sys_plugin_goals WHERE id = ?`, [id]);
     sdk.toast.success("Goal deleted");
     await loadGoals();
   }
@@ -260,8 +269,8 @@
         completed = TRUE,
         completed_at = CURRENT_TIMESTAMP,
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = '${goal.id}'
-    `);
+      WHERE id = ?
+    `, [goal.id]);
     sdk.toast.success(`Congratulations! Goal "${goal.name}" completed! 🎉`);
     await loadGoals();
   }
@@ -272,8 +281,8 @@
         completed = FALSE,
         completed_at = NULL,
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = '${goal.id}'
-    `);
+      WHERE id = ?
+    `, [goal.id]);
     await loadGoals();
   }
 
