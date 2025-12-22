@@ -1,6 +1,6 @@
 # Savings Goals
 
-A [Treeline](https://github.com/zack-schrag/treeline-money) plugin for tracking savings goals with account allocations.
+A [Treeline](https://github.com/treeline-money/treeline) plugin for tracking savings goals with account allocations.
 
 ## Features
 
@@ -33,15 +33,15 @@ Goals without linked accounts are tracked manually using the starting balance.
 ### Manual Installation
 
 ```bash
-tl plugin install https://github.com/zack-schrag/treeline-goals
+tl plugin install https://github.com/treeline-money/plugin-goals
 # Restart Treeline
 ```
 
 ## Development
 
 ```bash
-git clone https://github.com/zack-schrag/treeline-goals
-cd treeline-goals
+git clone https://github.com/treeline-money/plugin-goals
+cd plugin-goals
 npm install
 npm run build
 tl plugin install .

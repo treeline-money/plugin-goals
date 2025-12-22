@@ -28,11 +28,17 @@ This plugin stores goals in `sys_plugin_goals` table:
 CREATE TABLE IF NOT EXISTS sys_plugin_goals (
   id VARCHAR PRIMARY KEY,
   name VARCHAR NOT NULL,
-  target_amount DECIMAL NOT NULL,
-  current_amount DECIMAL DEFAULT 0,
+  target_amount DECIMAL(15,2) NOT NULL,
   target_date DATE,
-  color VARCHAR,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  allocations JSON,                              -- account allocations [{account_id, type, value}]
+  starting_balance DECIMAL(15,2) NOT NULL DEFAULT 0,
+  icon VARCHAR NOT NULL DEFAULT '🎯',
+  color VARCHAR NOT NULL DEFAULT '#3b82f6',
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  completed BOOLEAN NOT NULL DEFAULT FALSE,
+  completed_at TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 )
 ```
 

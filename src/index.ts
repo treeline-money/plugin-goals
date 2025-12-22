@@ -12,7 +12,8 @@ export const plugin: Plugin = {
     author: "Treeline",
     permissions: {
       tables: {
-        write: ["sys_plugin_goals"],
+        read: ["accounts", "sys_balance_snapshots", "sys_plugin_goals"],
+        create: ["sys_plugin_goals"],
       },
     },
   },
