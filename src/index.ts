@@ -11,10 +11,8 @@ export const plugin: Plugin = {
       "Track savings goals like emergency funds, house down payments, and more",
     author: "Treeline",
     permissions: {
-      tables: {
-        read: ["accounts", "sys_balance_snapshots", "sys_plugin_goals"],
-        create: ["sys_plugin_goals"],
-      },
+      read: ["accounts", "sys_balance_snapshots"],
+      schemaName: "plugin_goals",
     },
   },
 

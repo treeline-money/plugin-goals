@@ -22,10 +22,10 @@ tl plugin install .  # Install locally for testing
 
 ## Plugin Data
 
-This plugin stores goals in `sys_plugin_goals` table:
+This plugin stores goals in `plugin_goals.goals` table:
 
 ```sql
-CREATE TABLE IF NOT EXISTS sys_plugin_goals (
+CREATE TABLE IF NOT EXISTS plugin_goals.goals (
   id VARCHAR PRIMARY KEY,
   name VARCHAR NOT NULL,
   target_amount DECIMAL(15,2) NOT NULL,
@@ -68,7 +68,7 @@ Views receive `sdk` via props:
 | Method | What it does |
 |--------|--------------|
 | `sdk.query(sql)` | Read data |
-| `sdk.execute(sql)` | Write to sys_plugin_goals |
+| `sdk.execute(sql)` | Write to plugin_goals.goals |
 | `sdk.toast.success/error/info(msg)` | Show notifications |
 | `sdk.openView(viewId, props?)` | Navigate to another view |
 | `sdk.onDataRefresh(callback)` | React when data changes |

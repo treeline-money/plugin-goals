@@ -72,17 +72,17 @@
     try {
       const cols = await sdk.query<unknown[]>(`
         SELECT column_name FROM information_schema.columns
-        WHERE table_name = 'sys_plugin_goals' AND column_name = 'account_ids'
+        WHERE table_name = 'plugin_goals.goals' AND column_name = 'account_ids'
       `);
       if (cols.length > 0) {
-        await sdk.execute(`DROP TABLE IF EXISTS sys_plugin_goals`);
+        await sdk.execute(`DROP TABLE IF EXISTS plugin_goals.goals`);
       }
     } catch {
       // Table doesn't exist yet, that's fine
     }
 
     await sdk.execute(`
-      CREATE TABLE IF NOT EXISTS sys_plugin_goals (
+      CREATE TABLE IF NOT EXISTS plugin_goals.goals (
         id VARCHAR PRIMARY KEY,
         name VARCHAR NOT NULL,
         target_amount DECIMAL(15,2) NOT NULL,
@@ -134,7 +134,7 @@
     const result = await sdk.query<unknown[]>(`
       SELECT id, name, target_amount, target_date, allocations, starting_balance,
              icon, color, active, completed, completed_at, created_at, updated_at
-      FROM sys_plugin_goals
+      FROM plugin_goals.goals
       ORDER BY completed ASC, created_at DESC
     `);
 
@@ -203,7 +203,7 @@
     const startingBalance = newGoalStartAmount ?? 0;
 
     await sdk.execute(`
-      INSERT INTO sys_plugin_goals
+      INSERT INTO plugin_goals.goals
         (id, name, target_amount, target_date, allocations, starting_balance, icon, color)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `, [
@@ -230,7 +230,7 @@
       : null;
 
     await sdk.execute(`
-      UPDATE sys_plugin_goals SET
+      UPDATE plugin_goals.goals SET
         name = ?,
         target_amount = ?,
         target_date = ?,
@@ -258,14 +258,14 @@
   }
 
   async function deleteGoal(id: string) {
-    await sdk.execute(`DELETE FROM sys_plugin_goals WHERE id = ?`, [id]);
+    await sdk.execute(`DELETE FROM plugin_goals.goals WHERE id = ?`, [id]);
     sdk.toast.success("Goal deleted");
     await loadGoals();
   }
 
   async function markComplete(goal: Goal) {
     await sdk.execute(`
-      UPDATE sys_plugin_goals SET
+      UPDATE plugin_goals.goals SET
         completed = TRUE,
         completed_at = CURRENT_TIMESTAMP,
         updated_at = CURRENT_TIMESTAMP
@@ -277,7 +277,7 @@
 
   async function reopenGoal(goal: Goal) {
     await sdk.execute(`
-      UPDATE sys_plugin_goals SET
+      UPDATE plugin_goals.goals SET
         completed = FALSE,
         completed_at = NULL,
         updated_at = CURRENT_TIMESTAMP
