@@ -67,19 +67,8 @@
   }
 
   async function ensureTablesExist() {
-    // Drop old table if it has the old schema (account_ids instead of allocations)
-    // This is a dev-time migration - in production you'd do proper migrations
-    try {
-      const cols = await sdk.query<unknown[]>(`
-        SELECT column_name FROM information_schema.columns
-        WHERE table_name = 'plugin_goals.goals' AND column_name = 'account_ids'
-      `);
-      if (cols.length > 0) {
-        await sdk.execute(`DROP TABLE IF EXISTS plugin_goals.goals`);
-      }
-    } catch {
-      // Table doesn't exist yet, that's fine
-    }
+    // Create schema first
+    await sdk.execute(`CREATE SCHEMA IF NOT EXISTS plugin_goals`);
 
     await sdk.execute(`
       CREATE TABLE IF NOT EXISTS plugin_goals.goals (
