@@ -55,7 +55,7 @@
     loading = true;
     error = null;
     try {
-      await ensureTablesExist();
+      // Tables are created by migrations in index.ts - just load data
       await Promise.all([loadAccounts(), loadGoals()]);
       await calculateBalances();
     } catch (e) {
@@ -64,29 +64,6 @@
     } finally {
       loading = false;
     }
-  }
-
-  async function ensureTablesExist() {
-    // Create schema first
-    await sdk.execute(`CREATE SCHEMA IF NOT EXISTS plugin_goals`);
-
-    await sdk.execute(`
-      CREATE TABLE IF NOT EXISTS plugin_goals.goals (
-        id VARCHAR PRIMARY KEY,
-        name VARCHAR NOT NULL,
-        target_amount DECIMAL(15,2) NOT NULL,
-        target_date DATE,
-        allocations JSON,
-        starting_balance DECIMAL(15,2) NOT NULL DEFAULT 0,
-        icon VARCHAR NOT NULL DEFAULT '🎯',
-        color VARCHAR NOT NULL DEFAULT '#3b82f6',
-        active BOOLEAN NOT NULL DEFAULT TRUE,
-        completed BOOLEAN NOT NULL DEFAULT FALSE,
-        completed_at TIMESTAMP,
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
   }
 
   async function loadAccounts() {

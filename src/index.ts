@@ -1,6 +1,31 @@
-import type { Plugin, PluginContext, PluginSDK } from "@treeline-money/plugin-sdk";
+import type { Plugin, PluginContext, PluginSDK, PluginMigration } from "@treeline-money/plugin-sdk";
 import GoalsView from "./GoalsView.svelte";
 import { mount, unmount } from "svelte";
+
+// Database migrations - run in order by version when plugin loads
+const migrations: PluginMigration[] = [
+  {
+    version: 1,
+    name: "create_goals_table",
+    up: `
+      CREATE TABLE IF NOT EXISTS plugin_goals.goals (
+        id VARCHAR PRIMARY KEY,
+        name VARCHAR NOT NULL,
+        target_amount DECIMAL(15,2) NOT NULL,
+        target_date DATE,
+        allocations JSON,
+        starting_balance DECIMAL(15,2) NOT NULL DEFAULT 0,
+        icon VARCHAR NOT NULL DEFAULT '🎯',
+        color VARCHAR NOT NULL DEFAULT '#3b82f6',
+        active BOOLEAN NOT NULL DEFAULT TRUE,
+        completed BOOLEAN NOT NULL DEFAULT FALSE,
+        completed_at TIMESTAMP,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )
+    `,
+  },
+];
 
 export const plugin: Plugin = {
   manifest: {
@@ -15,6 +40,8 @@ export const plugin: Plugin = {
       schemaName: "plugin_goals",
     },
   },
+
+  migrations,
 
   activate(context: PluginContext) {
     // Register the main view
