@@ -28,6 +28,8 @@ export interface Goal {
   icon: string;
   /** Color for progress bar */
   color: string;
+  /** Optional image URL for visualization */
+  image_url: string | null;
   /** Whether goal is active */
   active: boolean;
   /** Whether goal is completed */

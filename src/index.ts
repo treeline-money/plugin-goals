@@ -25,6 +25,13 @@ const migrations: PluginMigration[] = [
       )
     `,
   },
+  {
+    version: 2,
+    name: "add_image_url",
+    up: `
+      ALTER TABLE plugin_goals.goals ADD COLUMN IF NOT EXISTS image_url VARCHAR;
+    `,
+  },
 ];
 
 export const plugin: Plugin = {
