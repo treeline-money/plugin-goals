@@ -275,12 +275,12 @@
     `, [
       goal.name,
       goal.target_amount,
-      goal.target_date,
+      goal.target_date || null,
       allocationsJson,
       goal.starting_balance,
       goal.icon,
       goal.color,
-      goal.image_url,
+      goal.image_url || null,
       goal.id
     ]);
 
