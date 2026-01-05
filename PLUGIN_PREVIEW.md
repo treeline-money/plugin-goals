@@ -1,18 +1,23 @@
-Set savings targets and track your progress. Allocate percentages or fixed amounts from your accounts toward each goal.
+Track savings goals with visual progress, account linking, and historical charts.
 
-<!-- TODO: Add screenshot -->
+![Goals plugin showing savings progress](./screenshots/goals-main-light.png)
+![Goals plugin showing savings progress](./screenshots/goals-main-dark.png)
 
 ## How it works
 
-Create a goal for anything you're saving toward - a vacation, emergency fund, house down payment, new car. Link your accounts and specify how much of each account counts toward the goal (a percentage or fixed amount). The plugin tracks your progress automatically.
+Create goals for things you're saving for - emergency fund, house down payment, vacation, etc. Link accounts and specify what percentage or fixed amount counts toward each goal. Progress is calculated automatically from your account balances.
+
+![Goal detail view with progress chart](./screenshots/goals-details-light.png)
+![Goal detail view with progress chart](./screenshots/goals-details-dark.png)
 
 ## What you'll see
 
-- **Progress toward each goal** - Visual indicator showing how close you are
-- **Target amounts and dates** - Optional deadlines with projected completion
-- **Account allocations** - Flexible linking with percentages or fixed amounts
-- **On-track status** - Whether your current savings rate will hit your target
+- **Visual progress** - Progress bars with milestone markers at 25%, 50%, 75%
+- **Goal images** - Add a photo of what you're saving for
+- **Historical charts** - See how your savings have grown over time
+- **Pace projections** - Estimated completion date based on your savings rate
+- **Celebration** - Confetti when you mark a goal complete
 
 ## Getting started
 
-Create your first goal from the plugin's sidebar view. Give it a name, target amount, and optionally a target date. Then link one or more accounts and specify how much of each counts toward this goal.
+Create your first goal, set a target amount, and optionally link accounts to track progress automatically.

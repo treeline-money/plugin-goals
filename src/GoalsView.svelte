@@ -153,6 +153,7 @@
 
       // Group by date
       const byDate = new Map<string, Map<string, number>>();
+
       for (const row of result) {
         const date = String(row[0]).split('T')[0];
         const accountId = row[1] as string;
@@ -163,11 +164,24 @@
       }
 
       // Calculate goal balance for each date using allocation rules
+      // Carry forward last known balance for accounts without snapshots on a given day
       const history: { date: string; balance: number }[] = [];
-      for (const [date, accountBalances] of byDate) {
+      const runningBalances = new Map<string, number>();
+
+      // Sort dates and process in order to carry forward balances
+      const sortedDates = [...byDate.keys()].sort();
+      for (const date of sortedDates) {
+        const accountBalances = byDate.get(date)!;
+
+        // Update running balances with any new snapshots for this date
+        for (const [accountId, balance] of accountBalances) {
+          runningBalances.set(accountId, balance);
+        }
+
+        // Calculate goal balance using running balances (carries forward missing accounts)
         let goalBalance = 0;
         for (const alloc of goal.allocations) {
-          const accountBalance = accountBalances.get(alloc.account_id) || 0;
+          const accountBalance = runningBalances.get(alloc.account_id) || 0;
           if (alloc.allocation_type === 'percentage') {
             goalBalance += (accountBalance * alloc.allocation_value) / 100;
           } else {
