@@ -737,7 +737,7 @@
                 {/if}
                 {#if goal.target_date && paceProjection}
                   <div class="stat">
-                    <span class="stat-label">Pace</span>
+                    <span class="stat-label">At current pace</span>
                     <span class="stat-value">{paceProjection}</span>
                   </div>
                 {:else if onTrack !== null}
